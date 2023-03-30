@@ -1,3 +1,4 @@
 .vscode
 scraper-env
 *.json
+.env
