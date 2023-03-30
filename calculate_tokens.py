@@ -2,7 +2,7 @@ import json
 
 import tiktoken
 
-json_file = open("./workfiles/raw_400.json")
+json_file = open("./workfiles/raw_info.json")
 
 json_data = json.load(json_file)
 
