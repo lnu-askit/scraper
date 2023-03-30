@@ -28,7 +28,7 @@ for link in entryLinks:
     linkQueue.put(link)
 scrapedLinks = set()
 articleLinks = set()
-maxCount = 5  # Change to adjust maximum number of pages to scrape
+maxCount = 400  # Change to adjust maximum number of pages to scrape
 
 while not linkQueue.empty() and articleLinks.__len__() <= maxCount:
     link = linkQueue.get()
