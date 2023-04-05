@@ -24,4 +24,4 @@ read scraper_key
 
 echo "SCRAPER_KEY=$scraper_key" >| .env
 
-echo "Setup finished!\nGo in to api directory and run `npm run dev`"
+echo "Setup complete!"
