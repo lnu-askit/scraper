@@ -1,13 +1,14 @@
+import os
 import queue
-
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.chrome.service import Service
-from webdriver_manager.chrome import ChromeDriverManager
+import sys
 
 from scripts.cleaner import clean_content
 from scripts.json_handler import write_to_json
 from scripts.scrape_page import scrape_content, scrape_links
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
 
 options = Options()
 options.add_argument("--window-size=1920,1200")
@@ -28,7 +29,15 @@ for link in entryLinks:
     linkQueue.put(link)
 scrapedLinks = set()
 articleLinks = set()
-maxCount = 400  # Change to adjust maximum number of pages to scrape
+maxCount = (
+    int(sys.argv[1]) or 10
+)  # Change to adjust maximum number of pages to scrape
+outDir = "workfiles"
+
+if not os.path.exists(outDir):
+    os.makedirs(outDir)
+
+print("Running scraper with maxCount: " + str(maxCount))
 
 while not linkQueue.empty() and articleLinks.__len__() <= maxCount:
     link = linkQueue.get()
@@ -53,8 +62,6 @@ articleDict = {"articleLinks": []}
 for link in articleLinks:
     articleDict["articleLinks"].append(link)
 
-write_to_json(articleDict, "workfiles/article_links.json")
-
 resultDict = {"informationBlobs": []}
 
 while articleLinks.__len__() != 0:
@@ -68,6 +75,7 @@ while articleLinks.__len__() != 0:
         print("Error scraping content from: " + link)
         print(str(e))
 
-write_to_json(resultDict, "workfiles/raw_info.json")
+write_to_json(articleDict, outDir + "/article_links.json")
+write_to_json(resultDict, outDir + "/raw_info.json")
 
 driver.quit()
