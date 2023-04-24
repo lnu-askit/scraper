@@ -10,7 +10,7 @@ export default class IndexController {
     try {
       const { pages } = req.body
 
-      const python = spawn('python/scraper-env/Scripts/python.exe', ['python/scraper.py', `${pages}`])
+      const python = spawn('python3', ['python/scraper.py', `${pages}`])
 
       let logs: string[] = []
 
