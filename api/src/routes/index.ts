@@ -10,6 +10,8 @@ router.get('/', controller.index)
 
 router.post('/run-scraper', authScraper, controller.runScraper)
 
+router.get('/upsert-from-files', controller.upsertScrapedContent)
+
 router.use('*', (req: Request, res: Response, next: NextFunction) => {
   next(createError(404))
 })
