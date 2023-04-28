@@ -55,9 +55,11 @@ export default class IndexController {
 
       const responses = await Promise.all(
         files.map(async file => {
+          const fileID = file.title.concat(' - ' + file.url)
           const data = {
             documents: [
               {
+                id: fileID,
                 text: file.content,
                 metadata: {
                   source: 'email',
