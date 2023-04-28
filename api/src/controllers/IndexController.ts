@@ -59,11 +59,10 @@ export default class IndexController {
           const data = {
             documents: [
               {
-                id: fileID,
                 text: file.content,
                 metadata: {
                   source: 'email',
-                  source_id: file.title,
+                  source_id: fileID,
                   url: file.url
                 }
               }
