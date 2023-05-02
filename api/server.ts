@@ -1,5 +1,5 @@
 import dotenv from 'dotenv'
-import express, { Express } from 'express'
+import express, { Express, NextFunction, Request, Response } from 'express'
 import logger from 'morgan'
 import router from './src/routes/index.js'
 dotenv.config()
@@ -12,6 +12,22 @@ const run = async () => {
   server.use(express.json())
 
   server.use('/api', router)
+
+  server.use((err: { code?: number; status: number; message: string; stack: string }, req: Request, res: Response, next: NextFunction) => {
+    interface ErrorResponse {
+      status: number
+      message: string
+      stack?: string
+    }
+
+    const errorResponse: ErrorResponse = {
+      status: err.status || 500,
+      message: err.message || 'Internal Server Error',
+      stack: process.env.NODE_ENV !== 'production' ? err.stack : undefined
+    }
+
+    res.status(errorResponse.status).json(errorResponse)
+  })
 
   server.listen(port, () => {
     console.log(`⚡️[server]: Server is running at http://localhost:${port}`)
