@@ -48,15 +48,17 @@ while not linkQueue.empty() and articleLinks.__len__() <= maxCount:
         print("# Queue size: " + str(linkQueue.qsize()))
         print("# Scraped links (total): " + str(scrapedLinks.__len__()))
         print("# Article urls found: " + str(articleLinks.__len__()))
-        linkDict = scrape_links(link, driver)
-        for link in linkDict["articleLinks"]:
-            if link not in scrapedLinks:
-                articleLinks.add(link)
-                linkQueue.put(link)
-        for link in linkDict["categoryLinks"]:
-            if link not in scrapedLinks:
-                linkQueue.put(link)
-
+        try:
+            linkDict = scrape_links(link, driver)
+            for link in linkDict["articleLinks"]:
+                if link not in scrapedLinks:
+                    articleLinks.add(link)
+                    linkQueue.put(link)
+            for link in linkDict["categoryLinks"]:
+                if link not in scrapedLinks:
+                    linkQueue.put(link)
+        except:
+            print("Error scraping links from: " + link + "\nMoving on to next...")
 
 articleDict = {"articleLinks": []}
 
@@ -72,9 +74,8 @@ while articleLinks.__len__() != 0:
         infoBlob = scrape_content(link, driver)
         infoBlob["content"] = clean_content(infoBlob["content"])
         resultDict["informationBlobs"].append(infoBlob)
-    except Exception as e:
-        print("Error scraping content from: " + link)
-        print(str(e))
+    except:
+        print("Error scraping content from: " + link + "\nMoving on to next...")
 
 write_to_json(articleDict, outDir + "/article_links.json")
 write_to_json(resultDict, outDir + "/raw_info.json")

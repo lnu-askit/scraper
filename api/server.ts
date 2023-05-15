@@ -1,5 +1,6 @@
 import dotenv from 'dotenv'
 import express, { Express, NextFunction, Request, Response } from 'express'
+import rateLimit from 'express-rate-limit'
 import logger from 'morgan'
 import router from './src/routes/index.js'
 dotenv.config()
@@ -10,6 +11,16 @@ const run = async () => {
 
   server.use(logger('dev'))
   server.use(express.json())
+
+  const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 100,
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: 'Too many requests, please try again later.',
+  })
+
+  server.use(limiter)
 
   server.use('/api', router)
 

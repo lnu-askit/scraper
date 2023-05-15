@@ -6,3 +6,4 @@ def write_to_json(data, file_name):
 
     with open(file_name, "w", encoding="utf-8") as output:
         output.write(json_data)
+    print("Wrote to file: " + file_name)
