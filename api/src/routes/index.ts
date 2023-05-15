@@ -16,6 +16,7 @@ const scraperLimiter = rateLimit({
 })
 
 router.get('/', controller.index)
+router.get('/data', controller.data)
 
 router.post('/run-scraper', authScraper, scraperLimiter, controller.runScraper)
 router.post('/upload-scraped', authScraper, controller.uploadScrapedContent)
@@ -24,6 +25,5 @@ router.post('/get-context', authScraper, controller.getContext)
 router.use('*', (req: Request, res: Response, next: NextFunction) => {
   next(createError(404))
 })
-
 
 export default router
